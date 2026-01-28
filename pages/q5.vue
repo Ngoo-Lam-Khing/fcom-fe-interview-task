@@ -47,7 +47,23 @@ const {
   fetchDetail,
 } = useQ5()
 
-const run = () => {}
+const run = async () => {
+  try {
+    const list = await fetchList();
+  
+    // 並行發送所有請求
+    const detailPromises = list.map((item: { id: string }) => fetchDetail(item.id));
+    
+    // 等待所有請求完成
+    const details = await Promise.all(detailPromises);
+    
+    data.value = details;
+    
+    return details;
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 </script>
 
